@@ -1,0 +1,59 @@
+{
+  "name": "linkfetch-mcp",
+  "version": "0.1.1",
+  "description": "LinkedIn MCP server for Claude, Cursor and Zed: jobs, profiles, companies, people search, posts and inbox via the LinkFetch API.",
+  "mcpName": "io.github.ffucucuoglu/linkfetch-mcp",
+  "license": "MIT",
+  "author": "Fuat Fucucuoglu (https://linkfetch.io)",
+  "homepage": "https://linkfetch.io/mcp/claude",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ffucucuoglu/linkedin-mcp-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ffucucuoglu/linkedin-mcp-server/issues"
+  },
+  "type": "module",
+  "bin": {
+    "linkfetch-mcp": "dist/index.js"
+  },
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "model-context-protocol",
+    "linkedin",
+    "linkedin-mcp",
+    "linkedin-api",
+    "linkedin-jobs",
+    "claude",
+    "claude-desktop",
+    "claude-code",
+    "anthropic",
+    "cursor",
+    "linkfetch"
+  ]
+}

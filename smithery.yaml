@@ -1,0 +1,11 @@
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    required: [linkfetchApiKey]
+    properties:
+      linkfetchApiKey:
+        type: string
+        description: LinkFetch API key (sk_live_…) from https://linkfetch.io/dashboard
+  commandFunction: |-
+    (config) => ({ command: "node", args: ["dist/index.js"], env: { LINKFETCH_API_KEY: config.linkfetchApiKey } })
