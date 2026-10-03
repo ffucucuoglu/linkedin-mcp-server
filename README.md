@@ -1,4 +1,4 @@
-# linkfetch-mcp — LinkedIn MCP server for Claude
+# LinkedIn MCP server for Claude, Cursor and any AI agent
 
 <!-- mcp-name: io.github.ffucucuoglu/linkfetch-mcp -->
 
@@ -6,9 +6,9 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![MCP](https://img.shields.io/badge/MCP-stdio-black)](https://modelcontextprotocol.io)
 
-[Model Context Protocol](https://modelcontextprotocol.io) server for [LinkFetch](https://linkfetch.io). It gives Claude Desktop, Claude Code, Cursor, Windsurf, Zed and any other MCP client 24 LinkedIn tools: jobs search, profiles, companies, people and post search, posts and reactions, and your own inbox. Claude calls them directly, with no browser automation.
+`linkfetch-mcp` is a [Model Context Protocol](https://modelcontextprotocol.io) server that gives any AI agent 24 LinkedIn tools: jobs search, profiles, companies, people and post search, posts and reactions, and your own inbox. It works with Claude Desktop, Claude Code, Cursor, VS Code (GitHub Copilot), OpenAI Codex, Gemini CLI, Windsurf, Zed, Cline and your own agents built on the OpenAI Agents SDK, LangChain or any MCP client library. The agent calls typed tools and gets JSON back, with no browser automation.
 
-Setup guide for Claude: [linkfetch.io/mcp/claude](https://linkfetch.io/mcp/claude)
+Powered by the [LinkFetch](https://linkfetch.io) API. Step-by-step guide for Claude: [linkfetch.io/mcp/claude](https://linkfetch.io/mcp/claude)
 
 ## Tools
 
@@ -44,11 +44,11 @@ Most LinkedIn MCP servers drive a local Playwright browser with your cookies. Th
 
 ## Setup
 
-You need a LinkFetch API key (`LINKFETCH_API_KEY`). Configure the server in your MCP client:
+Get an API key at [linkfetch.io/dashboard](https://linkfetch.io/dashboard) (new accounts get $5 of free credit), then add the server to your client. Every client runs the same command: `npx -y linkfetch-mcp` with `LINKFETCH_API_KEY` set. Node.js 18+ is required.
 
 ### Claude Desktop
 
-Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
+Settings → Developer → Edit Config, or edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) / `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
 
 ```json
 {
@@ -56,13 +56,13 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
     "linkfetch": {
       "command": "npx",
       "args": ["-y", "linkfetch-mcp"],
-      "env": {
-        "LINKFETCH_API_KEY": "sk_live_..."
-      }
+      "env": { "LINKFETCH_API_KEY": "sk_live_..." }
     }
   }
 }
 ```
+
+Fully quit and reopen Claude.
 
 ### Claude Code
 
@@ -70,9 +70,82 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
 claude mcp add linkfetch -e LINKFETCH_API_KEY=sk_live_... -- npx -y linkfetch-mcp
 ```
 
-### Cursor / Windsurf / other MCP clients
+### Cursor, Windsurf, Gemini CLI, Cline
 
-Any client that speaks MCP over stdio works — point it at `npx -y linkfetch-mcp` with `LINKFETCH_API_KEY` in the environment.
+These use the same `mcpServers` block as Claude Desktop above. Put it in:
+
+| Client | Config file |
+|---|---|
+| Cursor | `~/.cursor/mcp.json` (global) or `.cursor/mcp.json` (project) |
+| Windsurf | `~/.codeium/windsurf/mcp_config.json` |
+| Gemini CLI | `~/.gemini/settings.json` |
+| Cline | MCP Servers → Configure → `cline_mcp_settings.json` |
+
+### VS Code (GitHub Copilot agent mode)
+
+`.vscode/mcp.json`:
+
+```json
+{
+  "servers": {
+    "linkfetch": {
+      "command": "npx",
+      "args": ["-y", "linkfetch-mcp"],
+      "env": { "LINKFETCH_API_KEY": "sk_live_..." }
+    }
+  }
+}
+```
+
+### OpenAI Codex CLI
+
+`~/.codex/config.toml`:
+
+```toml
+[mcp_servers.linkfetch]
+command = "npx"
+args = ["-y", "linkfetch-mcp"]
+env = { LINKFETCH_API_KEY = "sk_live_..." }
+```
+
+### Zed
+
+`settings.json`:
+
+```json
+{
+  "context_servers": {
+    "linkfetch": {
+      "command": "npx",
+      "args": ["-y", "linkfetch-mcp"],
+      "env": { "LINKFETCH_API_KEY": "sk_live_..." }
+    }
+  }
+}
+```
+
+### Your own agent
+
+Any MCP client library can spawn the server over stdio. OpenAI Agents SDK (Python):
+
+```python
+from agents import Agent, Runner
+from agents.mcp import MCPServerStdio
+
+async with MCPServerStdio(params={
+    "command": "npx",
+    "args": ["-y", "linkfetch-mcp"],
+    "env": {"LINKFETCH_API_KEY": "sk_live_..."},
+}) as linkfetch:
+    agent = Agent(name="LinkedIn researcher", mcp_servers=[linkfetch])
+    result = await Runner.run(agent, "Find senior data engineer jobs in Berlin posted this week")
+```
+
+LangChain users can load the same server with `langchain-mcp-adapters`.
+
+### ChatGPT and claude.ai (web)
+
+Web chat apps only accept remote MCP connectors, and this server runs locally over stdio, so use one of the clients above for now. A hosted connector is planned.
 
 ## Environment variables
 

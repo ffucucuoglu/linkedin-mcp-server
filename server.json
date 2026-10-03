@@ -2,14 +2,14 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
   "name": "io.github.ffucucuoglu/linkfetch-mcp",
   "title": "LinkFetch: LinkedIn MCP",
-  "description": "LinkedIn for Claude: jobs, profiles, companies, people search, posts and inbox.",
+  "description": "LinkedIn for AI agents: jobs, profiles, companies, people search, posts and inbox.",
   "websiteUrl": "https://linkfetch.io/mcp/claude",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "linkfetch-mcp",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "transport": {
         "type": "stdio"
       },
