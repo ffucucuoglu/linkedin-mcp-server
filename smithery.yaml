@@ -6,6 +6,6 @@ startCommand:
     properties:
       linkfetchApiKey:
         type: string
-        description: LinkFetch API key (sk_live_…) from https://linkfetch.io/dashboard
+        description: LinkFetch API key (lf_…) from https://linkfetch.io/app/mcp
   commandFunction: |-
     (config) => ({ command: "node", args: ["dist/index.js"], env: { LINKFETCH_API_KEY: config.linkfetchApiKey } })
